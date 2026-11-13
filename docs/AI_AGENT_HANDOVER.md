@@ -1,7 +1,23 @@
 ﻿# AI Agent Handover & Session State Document
 
-> **Notice to AI Agent / Engineer Resuming This Work**:
-> This document details the exact state of the environment, local filesystem layout, tested attack vectors, validated breakthroughs, and recommended execution routes. Read this document first before taking any action.
+> 🛑 **MANDATORY OPERATING DIRECTIVE FOR RESUMING AI AGENTS**:  
+> **DO NOT REPEAT THE AUTHOR'S MISTAKES.**  
+> The author of this repository ("aka ME") spent over 9 continuous hours discovering and testing the boundaries of stock firmware R2.57. Every failure documented in **Section 0** is an established, proven hard stop.  
+> If you encounter, consider, or are asked to attempt any of these known failure paths, you **MUST EXPLICITLY REPORT IT TO THE USER**, quoting:  
+> *"The author of this repository ('aka ME') also faced this exact issue [quote the specific roadblock/error], so we are going to avoid this mistake and take [alternative path]."*
+
+---
+
+## 0. Blacklist of Proven Mistakes & Anti-Patterns (DO NOT RETRY!)
+
+| # | Proven Mistake / Deadlock | What Happens | Why It Fails | Mandatory Quote to User & What to Do Instead |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | **Blind Web UI Downgrade to R2.15** | Router UI displays: `Firmware file is invalid or corrupted.` | Stock R2.57 runs a background validation daemon that enforces anti-rollback and checks signatures, writing failure codes to `/tmp/firmCheckRes.txt`. | **Quote to User**: *"The author of this repository ('aka ME') also faced 'Firmware file is invalid or corrupted' when uploading R2.15 directly. We know R2.57 rejects older images at the daemon level, so we are avoiding blind re-uploads. Instead, we must gain shell access first to run the `/tmp/firmCheckRes.txt` bypass loop, or flash via MTD directly."* |
+| **2** | **Restoring Config with Unmatched / Uncalculated Checksum** | Router rejects `.enc` restore or discards injected lines. | The parser verifies a 32-character MD5 checksum across all bytes from byte `0` to line 3012. Any change to line 1 invalidates the stock MD5. | **Quote to User**: *"The author of this repository ('aka ME') spent extensive time resolving config restore rejections caused by MD5 mismatches. We are not restoring raw modified files without verifying their exact MD5 using `checksum_calculator.py`. We already generated `modified_correct_JCOW414.enc` with a verified MD5 for this reason."* |
+| **3** | **Spamming Direct unauthenticated curl POST to `/platform.cgi`** | Returns `401 Unauthorized` or empty chunked response. | Router requires active browser session tracking and session headers; unauthenticated POST requests are dropped by the web daemon. | **Quote to User**: *"The author of this repository ('aka ME') tested unauthenticated direct POST requests to `/platform.cgi` and verified they consistently return 401 Unauthorized. We are avoiding blind POST scripts and will use an authenticated browser session."* |
+| **4** | **Hanging on Browser Modal Loading Overlay** | Automated browsers freeze indefinitely on *"Loading Please wait..!"* with a spinning GIF. | Client-side JavaScript (`loadingStatus.js`) overlay `#tf1_pageLoadingOverLay` locks the DOM and fails to dispatch the underlying form POST if event listeners are desynchronized. | **Quote to User**: *"The author of this repository ('aka ME') discovered that the web panel's loading overlay hangs indefinitely in automated browsers. We are avoiding waiting on the UI spinner and will dispatch the form submission directly or dismiss the overlay via console."* |
+| **5** | **Plugging in the GPON Fiber Optic Cable** | Router auto-updates firmware or wipes custom configuration. | Jio TR-069 ACS remote-management automatically pushes operator policy when connected to the ISP optical distribution network. | **Quote to User**: *"The author of this repository ('aka ME') explicitly kept the fiber cable unplugged to prevent TR-069 from reverting changes or locking down the device. Keep the optical fiber disconnected."* |
+| **6** | **Routing Internet / GitHub Operations via the Ethernet Adapter** | Commands like `git push` or external HTTP calls hang or timeout. | The Ethernet adapter has default gateway `192.168.29.1` (the offline workbench router), which has no WAN connectivity. | **Quote to User**: *"The author of this repository ('aka ME') found that Windows defaults outbound internet traffic to the offline Ethernet router, causing timeouts. We must bind internet operations to the Wi-Fi adapter (`192.168.29.84`)."* |
 
 ---
 
@@ -26,34 +42,34 @@ All project assets are organized under `D:\#IMPPPPPPPPPPPPPPPPPPPPPPPP\`:
 
 ```text
 D:\#IMPPPPPPPPPPPPPPPPPPPPPPPP\
-â”œâ”€â”€ #FURTHER_IMPP - Copy\                     # Configuration reverse-engineering workspace
-â”‚   â”œâ”€â”€ RSVOTCXXXXXXXX_JCOW414.enc           # Original factory encrypted configuration backup
-â”‚   â”œâ”€â”€ RSVOTCXXXXXXXX_JCOW414.txt           # Decrypted original configuration (LF line endings)
-â”‚   â”œâ”€â”€ key.txt                               # Local AES key for this router (Passphrase)
-â”‚   â”œâ”€â”€ modified_correct.txt                  # Modified plaintext config with VALID MD5 checksum
-â”‚   â”œâ”€â”€ modified_correct_JCOW414.enc          # Encrypted modified config ready for restore (Salted__)
-â”‚   â”œâ”€â”€ RSVOTCXXXXXXXX_JCOW414_modified.enc  # Same encrypted file renamed to original backup format
-â”‚   â””â”€â”€ keyguesser_6a46fe0c.py                # Local keyguesser script
-â”‚
-â”œâ”€â”€ Firmware-JCOW414_2.15\                    # Firmware packages
-â”‚   â”œâ”€â”€ SRCMTF1_JCOW414_R2.15.img             # Stock R2.15 firmware image (38,071,183 bytes)
-â”‚   â”œâ”€â”€ SRCMTF1_JCOW414_R2.15.sig             # Stock R2.15 cryptographic signature (256 bytes)
-â”‚   â””â”€â”€ openwrt-jiofiber_jcow414_v1.1.trx     # OpenWrt factory image (10,223,616 bytes)
-â”‚
-â”œâ”€â”€ jiofiber-jcow414-r257-research\           # This repository (Git tracked)
-â”‚   â”œâ”€â”€ README.md
-â”‚   â”œâ”€â”€ docs/
-â”‚   â”‚   â”œâ”€â”€ AI_AGENT_HANDOVER.md              # (This document)
-â”‚   â”‚   â”œâ”€â”€ HARDWARE_AND_PARTITIONS.md
-â”‚   â”‚   â”œâ”€â”€ R257_VS_R215_SECURITY_ANALYSIS.md
-â”‚   â”‚   â””â”€â”€ CHRONOLOGICAL_LOG_AND_ERRORS.md
-â”‚   â”œâ”€â”€ scripts/
-â”‚   â”‚   â”œâ”€â”€ checksum_calculator.py
-â”‚   â”‚   â”œâ”€â”€ config_crypto.py
-â”‚   â”‚   â””â”€â”€ r257_signature_bypass_loop.sh
-â”‚   â””â”€â”€ templates/
-â”‚       â”œâ”€â”€ config_injection_template.txt
-â”‚       â””â”€â”€ keyguesser_template.py
+├── #FURTHER_IMPP - Copy\                     # Configuration reverse-engineering workspace
+│   ├── RSVOTCXXXXXXXX_JCOW414.enc           # Original factory encrypted configuration backup
+│   ├── RSVOTCXXXXXXXX_JCOW414.txt           # Decrypted original configuration (LF line endings)
+│   ├── key.txt                               # Local AES key for this router (Passphrase)
+│   ├── modified_correct.txt                  # Modified plaintext config with VALID MD5 checksum
+│   ├── modified_correct_JCOW414.enc          # Encrypted modified config ready for restore (Salted__)
+│   ├── RSVOTCXXXXXXXX_JCOW414_modified.enc  # Same encrypted file renamed to original backup format
+│   └── keyguesser_6a46fe0c.py                # Local keyguesser script
+│
+├── Firmware-JCOW414_2.15\                    # Firmware packages
+│   ├── SRCMTF1_JCOW414_R2.15.img             # Stock R2.15 firmware image (38,071,183 bytes)
+│   ├── SRCMTF1_JCOW414_R2.15.sig             # Stock R2.15 cryptographic signature (256 bytes)
+│   └── openwrt-jiofiber_jcow414_v1.1.trx     # OpenWrt factory image (10,223,616 bytes)
+│
+├── jiofiber-jcow414-r257-research\           # This repository (Git tracked)
+│   ├── README.md
+│   ├── docs/
+│   │   ├── AI_AGENT_HANDOVER.md              # (This document)
+│   │   ├── HARDWARE_AND_PARTITIONS.md
+│   │   ├── R257_VS_R215_SECURITY_ANALYSIS.md
+│   │   └── CHRONOLOGICAL_LOG_AND_ERRORS.md
+│   ├── scripts/
+│   │   ├── checksum_calculator.py
+│   │   ├── config_crypto.py
+│   │   └── r257_signature_bypass_loop.sh
+│   └── templates/
+│       ├── config_injection_template.txt
+│       └── keyguesser_template.py
 ```
 
 ---
@@ -62,14 +78,14 @@ D:\#IMPPPPPPPPPPPPPPPPPPPPPPPP\
 
 | Component / Vector | Status | Technical Details |
 | :--- | :--- | :--- |
-| **Direct Ping Connectivity** | âœ… **SUCCESS** | Host (`192.168.29.2`) pings router (`192.168.29.1`) with `<1ms` latency. |
-| **Port Status** | â„¹ï¸ **OBSERVED** | TCP 80 (HTTP), 443 (HTTPS), 8080 (HTTP-Alt) are **OPEN**; TCP 23 (Telnet), 22 (SSH) are **CLOSED**. |
-| **Config Decryption** | âœ… **SOLVED** | Decryption command: `openssl aes-128-cbc -d -pass pass:<KEY> -in <ENC> -out <TXT> -md sha256`. |
-| **Config MD5 Checksum** | âœ… **SOLVED** | Verified: MD5 across byte 0 to immediately before `config.checksum = "`. Stock checksum `7d66...` verified 100%. |
-| **Modified Config Payload** | âœ… **READY** | `modified_correct.txt` has valid MD5 (`1cf7898852d9b5b9303be87bcd6aff4f`) and line 1 injection payload. |
-| **Web UI Direct Downgrade** | âŒ **BLOCKED** | Uploading R2.15 `.img` + `.sig` via Web UI returns *"Firmware file is invalid or corrupted"*. |
-| **Downgrade Bypass Logic** | â„¹ï¸ **MAPPED** | Validation error is written to `/tmp/firmCheckRes.txt`. Looping `cat /dev/null > /tmp/firmCheckRes.txt` bypasses it, but requires a root shell. |
-| **Web UI Login Form Hang** | âš ï¸ **WORKAROUND NEEDED** | Web automation triggers client-side `#tf1_pageLoadingOverLay` ("Loading Please wait..!") which occludes form and delays POST. Direct unauthenticated curl POST returns `401 Unauthorized`. |
+| **Direct Ping Connectivity** | ✅ **SUCCESS** | Host (`192.168.29.2`) pings router (`192.168.29.1`) with `<1ms` latency. |
+| **Port Status** | ℹ️ **OBSERVED** | TCP 80 (HTTP), 443 (HTTPS), 8080 (HTTP-Alt) are **OPEN**; TCP 23 (Telnet), 22 (SSH) are **CLOSED**. |
+| **Config Decryption** | ✅ **SOLVED** | Decryption command: `openssl aes-128-cbc -d -pass pass:<KEY> -in <ENC> -out <TXT> -md sha256`. |
+| **Config MD5 Checksum** | ✅ **SOLVED** | Verified: MD5 across byte 0 to immediately before `config.checksum = "`. Stock checksum `7d66...` verified 100%. |
+| **Modified Config Payload** | ✅ **READY** | `modified_correct.txt` has valid MD5 (`1cf7898852d9b5b9303be87bcd6aff4f`) and line 1 injection payload. |
+| **Web UI Direct Downgrade** | ❌ **BLOCKED** | Uploading R2.15 `.img` + `.sig` via Web UI returns *"Firmware file is invalid or corrupted"*. |
+| **Downgrade Bypass Logic** | ℹ️ **MAPPED** | Validation error is written to `/tmp/firmCheckRes.txt`. Looping `cat /dev/null > /tmp/firmCheckRes.txt` bypasses it, but requires a root shell. |
+| **Web UI Login Form Hang** | ⚠️ **WORKAROUND NEEDED** | Web automation triggers client-side `#tf1_pageLoadingOverLay` ("Loading Please wait..!") which occludes form and delays POST. Direct unauthenticated curl POST returns `401 Unauthorized`. |
 
 ---
 
@@ -145,13 +161,3 @@ If you already have a root shell on R2.57, you can flash the OpenWrt TRX image d
    reboot
    ```
 6. Post-Boot: The router will boot OpenWrt 23.05 with LuCI web interface at `http://192.168.1.1/` (Change host PC IP to `192.168.1.2`).
-
----
-
-## 5. Important Guardrails for the Resuming Agent
-
-* â›” **DO NOT connect the GPON Fiber cable**: TR-069 auto-management will immediately patch any open vectors or revert firmware.
-* â›” **DO NOT blindly re-upload R2.15 in the Web UI** without the `/tmp/firmCheckRes.txt` bypass loop runningâ€”it will always fail with *"invalid or corrupted"*.
-* â›” **DO NOT overwrite `RSVOTCXXXXXXXX_JCOW414.txt` or `key.txt`**â€”they are the clean recovery ground truth.
-* âš ï¸ **When pushing to GitHub**: Ensure Windows routes traffic via Wi-Fi (`--interface 192.168.29.84` or bound interface) so requests don't attempt to route out the offline Ethernet gateway.
-

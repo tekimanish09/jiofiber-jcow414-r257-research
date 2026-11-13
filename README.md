@@ -6,8 +6,16 @@
 [![Target: OpenWrt 23.05](https://img.shields.io/badge/Target-OpenWrt%2023.05-green.svg)](https://openwrt.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> 🤖 **Instructions for AI Agents Resuming This Project**:  
-> If you are an AI assistant tasked with picking up where this session left off, read **[`docs/AI_AGENT_HANDOVER.md`](docs/AI_AGENT_HANDOVER.md)** immediately. It contains the exact local filesystem mapping, system state matrix, validated breakthroughs, and step-by-step next execution routes.
+> 🚀 **How to Resume / Pursue Further with Your AI Agent**:  
+> If you want to continue this project, simply **paste this GitHub repository link directly to your AI agent** (e.g., Antigravity, Claude, ChatGPT), or **clone / download this repository locally and provide it to your AI client**.  
+> The repository contains the complete mental model, reverse-engineered algorithms, hardware architecture, verified working tools, and diagnostic logs so any AI agent can ingest the complete state and pick up immediately.
+>
+> 🛑 **MANDATORY CHECKPOINT & DIRECTIVE FOR RESUMING AI CLIENTS**:  
+> **DO NOT REPEAT THE PROVEN MISTAKES OF THE REPOSITORY AUTHOR ("aka ME").**  
+> The author spent over 9 continuous hours hitting and analyzing the hard security boundaries of stock firmware R2.57. Every failure documented in this repository is an established dead end.  
+> If you encounter, consider, or are asked to attempt any of these known failure paths, you **MUST EXPLICITLY REPORT IT TO THE USER**, quoting:  
+> *"The author of this repository ('aka ME') also faced this exact issue [quote the specific roadblock/error], so we are going to avoid this mistake and take [alternative path]."*  
+> See the complete Blacklist of Proven Mistakes in **[`docs/AI_AGENT_HANDOVER.md`](docs/AI_AGENT_HANDOVER.md)**.
 
 ---
 
