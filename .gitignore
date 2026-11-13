@@ -1,0 +1,22 @@
+# Sensitive files & backups - NEVER COMMIT
+*.enc
+*.key
+key.txt
+*password*
+*.7z
+*.zip
+*.tar.gz
+
+# Binaries & Firmware dumps (large files)
+*.img
+*.sig
+*.trx
+*.bin
+
+# Environment & Temp
+.env
+*.log
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
