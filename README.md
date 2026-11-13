@@ -6,7 +6,8 @@
 [![Target: OpenWrt 23.05](https://img.shields.io/badge/Target-OpenWrt%2023.05-green.svg)](https://openwrt.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Comprehensive Research Archive & Post-Mortem**: Documenting software-only downgrade attempts, reverse-engineering of configuration encryption & checksums, firmware signature validation roadblocks on stock firmware `R2.57`, and technical pathways to achieve OpenWrt installation.
+> 🤖 **Instructions for AI Agents Resuming This Project**:  
+> If you are an AI assistant tasked with picking up where this session left off, read **[`docs/AI_AGENT_HANDOVER.md`](docs/AI_AGENT_HANDOVER.md)** immediately. It contains the exact local filesystem mapping, system state matrix, validated breakthroughs, and step-by-step next execution routes.
 
 ---
 
@@ -182,17 +183,13 @@ This command swaps the active boot pointer between Bank 1 (`mtd4`) and Bank 2 (`
 
 ---
 
-## 5. Next Steps for Community Researchers
+## 5. Next Steps for Community Researchers & AI Agents
 
-If you have a Sercomm JCOW414 running firmware R2.57 and want to advance this work:
-
-1. **Hardware Serial (UART) Access**:
-   - Connecting a 3.3V USB-to-TTL serial adapter to the internal UART headers bypasses the web UI lock and grants an instant root shell.
-   - From UART, run `scripts/r257_signature_bypass_loop.sh &`, then trigger the downgrade to R2.15 via the web UI or write the TRX directly using `mtd -f write`.
-2. **Configuration Restore Vector**:
-   - Test whether restoring `backup_modified.enc` (with valid MD5 checksum) successfully executes the `telnetd` spawn command on boot in your specific hardware revision.
-3. **Firmware Decryption / Header Spoofing**:
-   - Investigate whether the header of `SRCMTF1_JCOW414_R2.15.img` can have its version string edited to match or exceed `R2.57` while remaining structurally acceptable to the bootloader.
+See **[`docs/AI_AGENT_HANDOVER.md`](docs/AI_AGENT_HANDOVER.md)** for a detailed execution guide on:
+1. Restoring the validated modified configuration (`modified_correct_JCOW414.enc`).
+2. Running the signature bypass loop to downgrade.
+3. Directly flashing the OpenWrt TRX via root shell.
+4. Hardware serial (UART) connection details.
 
 ---
 
@@ -202,12 +199,17 @@ If you have a Sercomm JCOW414 running firmware R2.57 and want to advance this wo
 ├── README.md                           # Master investigation report (this document)
 ├── LICENSE                             # MIT License
 ├── docs/
+│   ├── AI_AGENT_HANDOVER.md            # Handover instructions & state matrix for AI agents
+│   ├── CHRONOLOGICAL_LOG_AND_ERRORS.md # Full network, header, and diagnostic logs
 │   ├── HARDWARE_AND_PARTITIONS.md      # Detailed MTD layout and hardware breakdown
 │   └── R257_VS_R215_SECURITY_ANALYSIS.md # Deep-dive security & signature comparison
-└── scripts/
-    ├── checksum_calculator.py          # Standalone MD5 checksum calculator & updater
-    ├── config_crypto.py                # AES-128-CBC encryption/decryption tool
-    └── r257_signature_bypass_loop.sh   # Firmware signature bypass loop script
+├── scripts/
+│   ├── checksum_calculator.py          # Standalone MD5 checksum calculator & updater
+│   ├── config_crypto.py                # AES-128-CBC encryption/decryption tool
+│   └── r257_signature_bypass_loop.sh   # Firmware signature bypass loop script
+└── templates/
+    ├── config_injection_template.txt   # Reference template for Lua command injection
+    └── keyguesser_template.py          # Generic AES key derivation script
 ```
 
 ---

