@@ -1,6 +1,6 @@
-﻿# AI Agent Handover & Session State Document
+# AI Agent Handover & Session State Document
 
-> 🛑 **MANDATORY OPERATING DIRECTIVE FOR RESUMING AI AGENTS**:  
+> [STOP] **MANDATORY OPERATING DIRECTIVE FOR RESUMING AI AGENTS**:  
 > **DO NOT REPEAT THE AUTHOR'S MISTAKES.**  
 > The author of this repository ("aka tekimanish09") spent over 9 continuous hours discovering and testing the boundaries of stock firmware R2.57. Every failure documented in **Section 0** is an established, proven hard stop.  
 > If you encounter, consider, or are asked to attempt any of these known failure paths, you **MUST EXPLICITLY REPORT IT TO THE USER**, quoting:  
@@ -33,6 +33,10 @@
   - Host PC Ethernet IP: `192.168.29.2` (Subnet: `255.255.255.0`, Gateway: `192.168.29.1`)
   - Connection Type: Direct RJ45 Cat6 cable to LAN Port 1.
   - Optical WAN / GPON: **Physically Disconnected** (Critical to block ISP TR-069 auto-upgrades).
+* **Credentials & Keys**:
+  - Web Admin Username: `admin`
+  - Web Admin Password: `[REDACTED_PASSWORD]`
+  - AES Config Passphrase: Saved in local `key.txt` (Derived via reverse-engineered Sercomm key derivation).
 
 ---
 
@@ -41,35 +45,41 @@
 All project assets are organized under `D:\#IMPPPPPPPPPPPPPPPPPPPPPPPP\`:
 
 ```text
-D:\#IMPPPPPPPPPPPPPPPPPPPPPPPP\
-├── #FURTHER_IMPP - Copy\                     # Configuration reverse-engineering workspace
-│   ├── RSVOTCXXXXXXXX_JCOW414.enc           # Original factory encrypted configuration backup
-│   ├── RSVOTCXXXXXXXX_JCOW414.txt           # Decrypted original configuration (LF line endings)
-│   ├── key.txt                               # Local AES key for this router (Passphrase)
-│   ├── modified_correct.txt                  # Modified plaintext config with VALID MD5 checksum
-│   ├── modified_correct_JCOW414.enc          # Encrypted modified config ready for restore (Salted__)
-│   ├── RSVOTCXXXXXXXX_JCOW414_modified.enc  # Same encrypted file renamed to original backup format
-│   └── keyguesser_6a46fe0c.py                # Local keyguesser script
-│
-├── Firmware-JCOW414_2.15\                    # Firmware packages
-│   ├── SRCMTF1_JCOW414_R2.15.img             # Stock R2.15 firmware image (38,071,183 bytes)
-│   ├── SRCMTF1_JCOW414_R2.15.sig             # Stock R2.15 cryptographic signature (256 bytes)
-│   └── openwrt-jiofiber_jcow414_v1.1.trx     # OpenWrt factory image (10,223,616 bytes)
-│
-├── jiofiber-jcow414-r257-research\           # This repository (Git tracked)
-│   ├── README.md
-│   ├── docs/
-│   │   ├── AI_AGENT_HANDOVER.md              # (This document)
-│   │   ├── HARDWARE_AND_PARTITIONS.md
-│   │   ├── R257_VS_R215_SECURITY_ANALYSIS.md
-│   │   └── CHRONOLOGICAL_LOG_AND_ERRORS.md
-│   ├── scripts/
-│   │   ├── checksum_calculator.py
-│   │   ├── config_crypto.py
-│   │   └── r257_signature_bypass_loop.sh
-│   └── templates/
-│       ├── config_injection_template.txt
-│       └── keyguesser_template.py
+D:\#IMPPPPPPPPPPPPPPPPPPPPPPPP|-- #FURTHER_IMPP - Copy\                     # Configuration reverse-engineering workspace
+|   |-- RSVOTCXXXXXXXX_JCOW414.enc            # Original factory encrypted configuration backup
+|   |-- RSVOTCXXXXXXXX_JCOW414.txt            # Decrypted original configuration (LF line endings)
+|   |-- key.txt                               # Local AES key for this router (Passphrase)
+|   |-- modified_correct.txt                  # Modified plaintext config with VALID MD5 checksum
+|   |-- modified_correct_JCOW414.enc          # Encrypted modified config ready for restore (Salted__)
+|   |-- RSVOTCXXXXXXXX_JCOW414_modified.enc   # Same encrypted file renamed to original backup format
+|   \-- keyguesser_6a46fe0c.py                # Local keyguesser script
+|
+|-- Firmware-JCOW414_2.15\                    # Firmware packages
+|   |-- SRCMTF1_JCOW414_R2.15.img             # Stock R2.15 firmware image (38,071,183 bytes)
+|   |-- SRCMTF1_JCOW414_R2.15.sig             # Stock R2.15 cryptographic signature (256 bytes)
+|   \-- openwrt-jiofiber_jcow414_v1.1.trx     # OpenWrt factory image (10,223,616 bytes)
+|
+\-- jiofiber-jcow414-r257-research\           # This repository (Git tracked)
+    |-- README.md                             # Master investigation report & portfolio showcase
+    |-- LICENSE                               # MIT Open-Source License
+    |-- docs/
+    |   |-- PORTFOLIO_CASE_STUDY.md           # Engineering portfolio case study & problem log
+    |   |-- AI_AGENT_HANDOVER.md              # (This document)
+    |   |-- CHRONOLOGICAL_LOG_AND_ERRORS.md   # Full network, header, and diagnostic logs
+    |   |-- HARDWARE_AND_PARTITIONS.md        # Detailed MTD layout and hardware breakdown
+    |   |-- R257_VS_R215_SECURITY_ANALYSIS.md # Deep-dive security & signature comparison
+    |   \-- jcow414_openwrt_session_archive(Till Now).md # Sanitized raw investigation session archive
+    |-- firmware/                             # Firmware artifacts & target OpenWrt image
+    |   |-- SRCMTF1_JCOW414_R2.15.img         # Stock R2.15 firmware image (38 MB)
+    |   |-- SRCMTF1_JCOW414_R2.15.sig         # Stock R2.15 companion signature (256 bytes)
+    |   \-- openwrt-jiofiber_jcow414_v1.1.trx # OpenWrt 23.05 factory squashfs image (10.2 MB)
+    |-- scripts/
+    |   |-- checksum_calculator.py            # Standalone MD5 checksum calculator & updater
+    |   |-- config_crypto.py                  # AES-128-CBC encryption/decryption tool
+    |   \-- r257_signature_bypass_loop.sh     # Firmware signature bypass loop script
+    \-- templates/
+        |-- config_injection_template.txt     # Reference template for Lua command injection
+        \-- keyguesser_template.py            # Generic AES key derivation script
 ```
 
 ---
@@ -78,14 +88,14 @@ D:\#IMPPPPPPPPPPPPPPPPPPPPPPPP\
 
 | Component / Vector | Status | Technical Details |
 | :--- | :--- | :--- |
-| **Direct Ping Connectivity** | ✅ **SUCCESS** | Host (`192.168.29.2`) pings router (`192.168.29.1`) with `<1ms` latency. |
-| **Port Status** | ℹ️ **OBSERVED** | TCP 80 (HTTP), 443 (HTTPS), 8080 (HTTP-Alt) are **OPEN**; TCP 23 (Telnet), 22 (SSH) are **CLOSED**. |
-| **Config Decryption** | ✅ **SOLVED** | Decryption command: `openssl aes-128-cbc -d -pass pass:<KEY> -in <ENC> -out <TXT> -md sha256`. |
-| **Config MD5 Checksum** | ✅ **SOLVED** | Verified: MD5 across byte 0 to immediately before `config.checksum = "`. Stock checksum `7d66...` verified 100%. |
-| **Modified Config Payload** | ✅ **READY** | `modified_correct.txt` has valid MD5 (`1cf7898852d9b5b9303be87bcd6aff4f`) and line 1 injection payload. |
-| **Web UI Direct Downgrade** | ❌ **BLOCKED** | Uploading R2.15 `.img` + `.sig` via Web UI returns *"Firmware file is invalid or corrupted"*. |
-| **Downgrade Bypass Logic** | ℹ️ **MAPPED** | Validation error is written to `/tmp/firmCheckRes.txt`. Looping `cat /dev/null > /tmp/firmCheckRes.txt` bypasses it, but requires a root shell. |
-| **Web UI Login Form Hang** | ⚠️ **WORKAROUND NEEDED** | Web automation triggers client-side `#tf1_pageLoadingOverLay` ("Loading Please wait..!") which occludes form and delays POST. Direct unauthenticated curl POST returns `401 Unauthorized`. |
+| **Direct Ping Connectivity** | [SUCCESS] **SUCCESS** | Host (`192.168.29.2`) pings router (`192.168.29.1`) with `<1ms` latency. |
+| **Port Status** | [INFO] **OBSERVED** | TCP 80 (HTTP), 443 (HTTPS), 8080 (HTTP-Alt) are **OPEN**; TCP 23 (Telnet), 22 (SSH) are **CLOSED**. |
+| **Config Decryption** | [SUCCESS] **SOLVED** | Decryption command: `openssl aes-128-cbc -d -pass pass:<KEY> -in <ENC> -out <TXT> -md sha256`. |
+| **Config MD5 Checksum** | [SUCCESS] **SOLVED** | Verified: MD5 across byte 0 to immediately before `config.checksum = "`. Stock checksum `7d66...` verified 100%. |
+| **Modified Config Payload** | [SUCCESS] **READY** | `modified_correct.txt` has valid MD5 (`1cf7898852d9b5b9303be87bcd6aff4f`) and line 1 injection payload. |
+| **Web UI Direct Downgrade** | [BLOCKED] **BLOCKED** | Uploading R2.15 `.img` + `.sig` via Web UI returns *"Firmware file is invalid or corrupted"*. |
+| **Downgrade Bypass Logic** | [INFO] **MAPPED** | Validation error is written to `/tmp/firmCheckRes.txt`. Looping `cat /dev/null > /tmp/firmCheckRes.txt` bypasses it, but requires a root shell. |
+| **Web UI Login Form Hang** | [WARNING] **WORKAROUND NEEDED** | Web automation triggers client-side `#tf1_pageLoadingOverLay` ("Loading Please wait..!") which occludes form and delays POST. Direct unauthenticated curl POST returns `401 Unauthorized`. |
 
 ---
 
@@ -160,5 +170,12 @@ If you already have a root shell on R2.57, you can flash the OpenWrt TRX image d
    ```sh
    reboot
    ```
-6. Post-Boot: The router will boot OpenWrt 23.05 with LuCI web interface at `http://192.168.1.1/` (Change host PC IP to `192.168.1.2`).
+6. **Post-Boot**: The router will boot OpenWrt 23.05 with LuCI web interface at `http://192.168.1.1/` (Change host PC IP to `192.168.1.2`, subnet `255.255.255.0`).
 
+---
+
+## 5. Security & Verification Directives
+
+1. **Keep GPON Fiber Cable Disconnected**: Under no circumstances connect the optical WAN fiber cable to the router during this process. Doing so allows the ISP TR-069 ACS server to push automated firmware updates and overwrite custom configurations.
+2. **Preserve Network Isolation**: The host PC must maintain its dual-homed configuration (Ethernet on `192.168.29.2` for router testing; Wi-Fi on `192.168.29.84` for internet access). Outbound internet/Git commands must be explicitly directed through the Wi-Fi interface.
+3. **Verify All Checksums**: Before restoring any configuration, always verify the MD5 checksum using `python scripts/checksum_calculator.py <filename>`. Never flash a configuration file with an unverified checksum.

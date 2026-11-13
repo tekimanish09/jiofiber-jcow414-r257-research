@@ -1,6 +1,6 @@
-﻿---
-title: "Sercomm JCOW414 JioFiber R2.57 â†’ OpenWrt Investigation Archive"
-status: "BLOCKED â€” downgrade rejected; no firmware or configuration modification applied; session paused"
+---
+title: "Sercomm JCOW414 JioFiber R2.57 -> OpenWrt Investigation Archive"
+status: "BLOCKED  --  downgrade rejected; no firmware or configuration modification applied; session paused"
 repositories:
   - "https://github.com/Asjohn720/jiofiber-jcow414-openwrt"
 key_technologies:
@@ -100,17 +100,17 @@ The exact full repository tree was not preserved in the session record. The foll
 
 ```text
 jiofiber-jcow414-openwrt/
-â”œâ”€â”€ README.md
-â”œâ”€â”€ TESTING.md
-â””â”€â”€ openwrt/
-    â””â”€â”€ Build/
-        â””â”€â”€ sha256sums
+|-- README.md
+|-- TESTING.md
+\-- openwrt/
+    \-- Build/
+        \-- sha256sums
 ```
 
-- `README.md` â€” main guide and installation flow.
-- `TESTING.md` â€” maintainer's reported test results.
-- `openwrt/Build/sha256sums` â€” checksum manifest containing the TRX hash.
-- A Windows batch â€œroot unlockerâ€ script was included/referenced by the README and its source was inspected. **The exact path/name was not retained in the session record.**
+- `README.md`  --  main guide and installation flow.
+- `TESTING.md`  --  maintainer's reported test results.
+- `openwrt/Build/sha256sums`  --  checksum manifest containing the TRX hash.
+- A Windows batch "root unlocker"" script was included/referenced by the README and its source was inspected. **The exact path/name was not retained in the session record.**
 - The actual build output filename recorded in the repo checksum manifest was:
 
   ```text
@@ -140,9 +140,9 @@ jiofiber-jcow414-openwrt/
   - Bank 1: `tclinux`, identified in the guide as MTD partition `mtd4`.
   - Bank 2: `tclinux_slave`, identified as MTD partition `mtd7`.
 - **[REPOSITORY CLAIM]** The stock R2.15 firmware remains in Bank 2 and the device can automatically roll back if the new bank fails CRC/boot validation.
-- **[OBSERVED IN DOC REVIEW]** The README's â€œzero-risk rollbackâ€ / dual-bank narrative was internally inconsistent: it asserted that the stock image remains in Bank 2, but the rollback instructions did not clearly show an explicit boot-flag command selecting Bank 2. The author also described automatic rollback on CRC failure.
+- **[OBSERVED IN DOC REVIEW]** The README's "zero-risk rollback"" / dual-bank narrative was internally inconsistent: it asserted that the stock image remains in Bank 2, but the rollback instructions did not clearly show an explicit boot-flag command selecting Bank 2. The author also described automatic rollback on CRC failure.
 - **[UNKNOWN]** Whether this particular R2.57 router has the described partition layout, whether Bank 2 contains recoverable stock firmware, and whether automatic rollback behaves as claimed.
-- The guide's â€œzero-riskâ€ wording should not be treated as proof of zero risk.
+- The guide's "zero-risk"" wording should not be treated as proof of zero risk.
 
 ### TESTING.md claims (maintainer-reported, not independently verified)
 
@@ -313,44 +313,44 @@ The following image files were mounted in the session. They were supplied as vis
 
 | Filename | Size (bytes) | Dimensions |
 |---|---:|---:|
-| `1000085132.jpg` | 308,821 | 1536Ã—1152 |
-| `1000085133.jpg` | 300,133 | 1536Ã—1152 |
-| `1000085223.jpg` | 296,936 | 1152Ã—1536 |
-| `1794505904259.png` | 94,381 | 1920Ã—1080 |
-| `b68f5a78-ee11-4de4-b26c-01dc19ca54e82887934239307850350.png` | 1,653,098 | 1536Ã—1152 |
-| `image(20261112-213807).png` | 10,223 | 791Ã—116 |
-| `image(20261112-214340).png` | 159,592 | 1920Ã—1080 |
-| `image-1794496156354.jpg` | 318,092 | 1536Ã—1152 |
-| `image-1794496168425.jpg` | 235,935 | 1536Ã—1152 |
-| `image-1794496190905.jpg` | 226,245 | 1536Ã—1152 |
-| `image-1794497176511.jpg` | 271,233 | 1536Ã—1152 |
-| `image-1794497414592.jpg` | 272,803 | 1536Ã—1152 |
-| `image-1794498486876.jpg` | 275,442 | 1536Ã—1152 |
-| `image-1794499165880.jpg` | 321,261 | 1536Ã—1152 |
-| `image-1794500352053.jpg` | 216,894 | 1536Ã—1152 |
-| `image-1794503453946.jpg` | 233,230 | 1536Ã—1152 |
-| `image-1794503678538.jpg` | 273,645 | 1152Ã—1536 |
-| `image-1794504204011.jpg` | 301,385 | 1152Ã—1536 |
-| `image-1794504400633.jpg` | 269,128 | 1152Ã—1536 |
-| `image-1794504545793.jpg` | 265,146 | 1536Ã—1152 |
-| `image-1794506137044.jpg` | 219,385 | 1152Ã—1536 |
-| `image-1794506666869.jpg` | 222,785 | 1152Ã—1536 |
-| `image-1794507051346.jpg` | 192,720 | 1536Ã—1152 |
-| `image-1794510126699.jpg` | 415,755 | 1536Ã—1152 |
-| `image-1794510252799.jpg` | 391,733 | 1152Ã—1536 |
-| `image-1794510263024.jpg` | 175,289 | 1152Ã—1536 |
-| `image-1794510274005.jpg` | 170,569 | 1152Ã—1536 |
-| `image-1794510294596.jpg` | 177,104 | 1536Ã—1152 |
-| `image-1794510407503.jpg` | 357,887 | 1536Ã—1152 |
-| `image-1794511588276.jpg` | 201,241 | 1536Ã—1152 |
-| `image-1794511865573.jpg` | 238,792 | 1536Ã—1152 |
-| `image-1794512064296.jpg` | 371,648 | 1152Ã—1536 |
-| `image-1794512643064.jpg` | 342,080 | 1152Ã—1536 |
-| `image-1794512942396.jpg` | 271,978 | 1536Ã—1152 |
-| `image-1794514351521.jpg` | 386,454 | 1536Ã—1152 |
-| `image-1794515868224.jpg` | 295,909 | 1536Ã—1152 |
-| `image-1794515946442.jpg` | 209,248 | 1536Ã—1152 |
-| `image-1794517347930.jpg` | 270,502 | 1152Ã—1536 |
+| `1000085132.jpg` | 308,821 | 1536x -- 1152 |
+| `1000085133.jpg` | 300,133 | 1536x -- 1152 |
+| `1000085223.jpg` | 296,936 | 1152x -- 1536 |
+| `1794505904259.png` | 94,381 | 1920x -- 1080 |
+| `b68f5a78-ee11-4de4-b26c-01dc19ca54e82887934239307850350.png` | 1,653,098 | 1536x -- 1152 |
+| `image(20261112-213807).png` | 10,223 | 791x -- 116 |
+| `image(20261112-214340).png` | 159,592 | 1920x -- 1080 |
+| `image-1794496156354.jpg` | 318,092 | 1536x -- 1152 |
+| `image-1794496168425.jpg` | 235,935 | 1536x -- 1152 |
+| `image-1794496190905.jpg` | 226,245 | 1536x -- 1152 |
+| `image-1794497176511.jpg` | 271,233 | 1536x -- 1152 |
+| `image-1794497414592.jpg` | 272,803 | 1536x -- 1152 |
+| `image-1794498486876.jpg` | 275,442 | 1536x -- 1152 |
+| `image-1794499165880.jpg` | 321,261 | 1536x -- 1152 |
+| `image-1794500352053.jpg` | 216,894 | 1536x -- 1152 |
+| `image-1794503453946.jpg` | 233,230 | 1536x -- 1152 |
+| `image-1794503678538.jpg` | 273,645 | 1152x -- 1536 |
+| `image-1794504204011.jpg` | 301,385 | 1152x -- 1536 |
+| `image-1794504400633.jpg` | 269,128 | 1152x -- 1536 |
+| `image-1794504545793.jpg` | 265,146 | 1536x -- 1152 |
+| `image-1794506137044.jpg` | 219,385 | 1152x -- 1536 |
+| `image-1794506666869.jpg` | 222,785 | 1152x -- 1536 |
+| `image-1794507051346.jpg` | 192,720 | 1536x -- 1152 |
+| `image-1794510126699.jpg` | 415,755 | 1536x -- 1152 |
+| `image-1794510252799.jpg` | 391,733 | 1152x -- 1536 |
+| `image-1794510263024.jpg` | 175,289 | 1152x -- 1536 |
+| `image-1794510274005.jpg` | 170,569 | 1152x -- 1536 |
+| `image-1794510294596.jpg` | 177,104 | 1536x -- 1152 |
+| `image-1794510407503.jpg` | 357,887 | 1536x -- 1152 |
+| `image-1794511588276.jpg` | 201,241 | 1536x -- 1152 |
+| `image-1794511865573.jpg` | 238,792 | 1536x -- 1152 |
+| `image-1794512064296.jpg` | 371,648 | 1152x -- 1536 |
+| `image-1794512643064.jpg` | 342,080 | 1152x -- 1536 |
+| `image-1794512942396.jpg` | 271,978 | 1536x -- 1152 |
+| `image-1794514351521.jpg` | 386,454 | 1536x -- 1152 |
+| `image-1794515868224.jpg` | 295,909 | 1536x -- 1152 |
+| `image-1794515946442.jpg` | 209,248 | 1536x -- 1152 |
+| `image-1794517347930.jpg` | 270,502 | 1152x -- 1536 |
 
 Total: **38 image files**. Their exact names and file metadata are preserved above; their per-image semantic interpretation is not recoverable from the retained notes.
 
@@ -399,11 +399,11 @@ Total: **38 image files**. Their exact names and file metadata are preserved abo
 
 - **Action / Hypothesis:** Inspect the router's configuration format and identify useful configuration fields/possible management settings.
 - **Artifacts:**
-  - `RSVOTCXXXXXXXX_JCOW414.enc` â€” encrypted backup.
-  - `RSVOTCXXXXXXXX_JCOW414.txt` â€” decrypted/plaintext config.
+  - `RSVOTCXXXXXXXX_JCOW414.enc`  --  encrypted backup.
+  - `RSVOTCXXXXXXXX_JCOW414.txt`  --  decrypted/plaintext config.
   - A `key.txt` was referenced in earlier work; it is not currently in the mounted artifact inventory.
-  - `BackupRestore_819184b1_5f581da4.txt` â€” HTML snippet from backup/restore page.
-  - `Install_OpenSSL.bat` â€” OpenSSL installation helper.
+  - `BackupRestore_819184b1_5f581da4.txt`  --  HTML snippet from backup/restore page.
+  - `Install_OpenSSL.bat`  --  OpenSSL installation helper.
 - **Outcome (`[PARTIAL]`):** Original config plaintext became available and was used for a comparison. The decryption command/key derivation details were not preserved in retained notes.
 - **Root Cause / Technical Detail:** Router backup UI accepts `.enc` on restore field `file.restore`; source warns that potentially sensitive values may be stored in the encrypted file. The encrypted config's content is not necessarily safe to share.
 
@@ -442,7 +442,7 @@ Total: **38 image files**. Their exact names and file metadata are preserved abo
 ### Phase 9: Confirm exact files and user requests certainty
 
 - **Action / Hypothesis:** Re-check the three files after user uploaded them again and asked for certainty and speed.
-- **User wording/intent:** Asked to go through it â€œ100% sureâ€ and keep it quick; user was frustrated by extended back-and-forth and approximately 8.5 hours of work.
+- **User wording/intent:** Asked to go through it "100% sure"" and keep it quick; user was frustrated by extended back-and-forth and approximately 8.5 hours of work.
 - **Outcome (`[SUCCESS]`):** Re-uploaded `.img`, `.sig`, and `.trx` had same hashes as the previously checked files. Re-upload did not reveal any mismatch.
 - **Limitation repeated:** Cannot claim 100% certainty on signature authenticity, R2.57 downgrade acceptance, or bank recovery because evidence does not establish those facts.
 
@@ -485,7 +485,7 @@ Total: **38 image files**. Their exact names and file metadata are preserved abo
 - Local file integrity checks passed for the R2.15 IMG/SIG pair; the two copies of each artifact hash identically.
 - The repo says this `.img` + `.sig` pair is the correct downgrade path.
 - The UI accepted both files into their separate fields sufficiently to enable the final Update/Upgrade button.
-- The actual upgrade request failed with â€œFirmware file is invalid or corrupted.â€
+- The actual upgrade request failed with "Firmware file is invalid or corrupted.""
 - The visible error is generic. It does not identify the internal rejection reason.
 - **Leading hypothesis:** R2.57 may enforce a signing key or downgrade policy that prevents acceptance of R2.15. This remains a hypothesis, not a confirmed cause.
 - Older community observations about a key change after approximately R2.49 were noted, but the newer repository may have different evidence/approach. No trusted-key cryptographic test was completed.
@@ -641,7 +641,7 @@ MD5 computed over bytes before checksum declaration, including preceding newline
 1cf7898852d9b5b9303be87bcd6aff4f
 
 Result:
-MISMATCH â€” modified configuration is not validated; do not restore.
+MISMATCH  --  modified configuration is not validated; do not restore.
 ```
 
 ## 5.8 Intentionally withheld executable material
@@ -681,13 +681,13 @@ No current evidence distinguishes these cases. Do not label one as the root caus
 3. **Review the repository's current README, TESTING.md, commit history, issues, and checksum manifest** for any explicit R2.57 test evidence. Distinguish maintainer confirmation from user reports and code inspection.
 4. **Investigate stock firmware validation behavior without submitting modified images.** Prefer logs, documented validation output, or non-destructive inspection over trial-and-error uploads.
 5. **Treat config restore as a separate unresolved path.** The modified config currently has a checksum mismatch and must not be restored. Reconstruct only from the unmodified original and verified format information; do not assume the repo's injection behavior works on R2.57.
-6. **Before any future OpenWrt flash, independently establish recovery feasibility.** Do not rely on â€œzero-riskâ€ language. Validate exact partition mapping and which bank holds the stock image for this specific device/firmware revision.
+6. **Before any future OpenWrt flash, independently establish recovery feasibility.** Do not rely on "zero-risk"" language. Validate exact partition mapping and which bank holds the stock image for this specific device/firmware revision.
 7. **If and only if OpenWrt is safely installed**, configure LAN bridge/AP mode as documented, accounting for expected `br-lan`, all four LAN ports, and no GPON support.
 
 ## 6.3 Unresolved Questions / Edge Cases
 
 - Does R2.57 trust the public key corresponding to the supplied R2.15 `.sig`?
-- What exact internal validation check produced â€œFirmware file is invalid or corrupted.â€?
+- What exact internal validation check produced "Firmware file is invalid or corrupted.""?
 - Does the stock admin page require a different pairing/order/content encoding than the two separate file controls as used? User did upload both separately and the final button became active, so simple omission is ruled out.
 - Does R2.57 enforce anti-rollback independent of signature?
 - Is the R2.15 IMG a valid package for this unit's region/operator/hardware revision, not merely labelled JCOW414?
